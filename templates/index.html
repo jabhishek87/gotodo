@@ -1,0 +1,41 @@
+{{ $lanes := .lanes }}
+{{ $todos := .todos }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO APP</title>
+
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <script src="/static/js/htmx.min.js"></script>
+    <script src="/static/js/app.js" defer></script>
+  </head>
+  <body>
+    <div class="board">
+      <form id="todo-form"
+      hx-post="/todos"
+      hx-target="#new-lane"
+      hx-swap="beforeend"
+      hx-on::after-request="this.reset()">
+        <input name="title" required />
+        <button>Save</button>
+      </form>
+
+      <div class="lanes">
+        {{range $lane := $lanes}}
+          <div class="swim-lane", id="{{$lane.ID}}-lane">
+            <h3 class="heading">{{$lane.Name}}</h3>
+            {{range $todo := $todos}}
+                {{if eq $todo.Status $lane.ID}}
+                    <p class="task" id="{{$todo.UUID}}" draggable="true">{{$todo.Title}}</p>
+                {{end}}
+            {{end}}
+          </div>
+
+        {{end}}
+      </div>
+      <div id="myDiv"></div>
+  </body>
+</html>
